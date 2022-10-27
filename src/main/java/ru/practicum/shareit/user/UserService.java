@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.common.errors.NotFoundException;
+import ru.practicum.shareit.common.errors.NotUniqueException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class UserService {
 
     public UserDto create(UserDto userDto) {
         User user = mapper.toModel(userDto);
+        throwIfEmailNotUnique(user);
         return mapper.toDTO(repository.create(user));
     }
 
@@ -22,6 +24,7 @@ public class UserService {
         User userToUpdate = findUserById(userId);
         User newUserData = mapper.toModel(userDto);
         updateUserData(userToUpdate, newUserData);
+        throwIfEmailNotUnique(userToUpdate);
 
         return mapper.toDTO(repository.update(userId, userToUpdate));
     }
@@ -46,7 +49,8 @@ public class UserService {
     }
 
     private User findUserById(Long userId) {
-        return repository.findById(userId).orElseThrow(() -> new NotFoundException(userId, "User"));
+        return repository.findById(userId)
+                         .orElseThrow(() -> new NotFoundException(userId, "User"));
     }
 
     private void updateUserData(User user, User dataToUpdate) {
@@ -56,6 +60,12 @@ public class UserService {
 
         if (dataToUpdate.getName() != null) {
             user.setName(dataToUpdate.getName());
+        }
+    }
+
+    private void throwIfEmailNotUnique(User user) {
+        if (! repository.isEmailUnique(user)) {
+            throw new NotUniqueException("User with such email is already exists");
         }
     }
 }

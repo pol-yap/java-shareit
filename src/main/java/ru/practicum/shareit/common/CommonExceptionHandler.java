@@ -30,7 +30,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBadRequest(BadRequestException e) {
-        log.debug(e.getMessage());
+        log.error(e.getMessage());
 
         return e.getMessage();
     }
@@ -38,7 +38,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(NotUniqueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleNotUnique(NotUniqueException e) {
-        log.debug(e.getMessage());
+        log.error(e.getMessage());
 
         return e.getMessage();
     }
@@ -46,7 +46,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleForbidden(ForbiddenException e) {
-        log.debug(e.getMessage());
+        log.error(e.getMessage());
 
         return e.getMessage();
     }

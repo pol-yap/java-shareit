@@ -1,8 +1,5 @@
 package ru.practicum.shareit.user;
 
-public interface UserMapper {
+import ru.practicum.shareit.common.CommonMapper;
 
-    UserDto toDTO(User user);
-
-    User toModel(UserDto userDto);
-}
+public interface UserMapper extends CommonMapper<User, UserDto> {}

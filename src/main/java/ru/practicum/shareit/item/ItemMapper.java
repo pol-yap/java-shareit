@@ -1,8 +1,5 @@
 package ru.practicum.shareit.item;
 
-public interface ItemMapper {
+import ru.practicum.shareit.common.CommonMapper;
 
-    ItemDto toDTO(Item item);
-
-    Item toModel(ItemDto itemDto);
-}
+public interface ItemMapper extends CommonMapper<Item, ItemDto> {}

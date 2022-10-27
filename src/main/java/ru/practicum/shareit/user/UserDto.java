@@ -12,6 +12,7 @@ public class UserDto {
 
     private Long id;
 
+    @NotBlank(message = "User name shouldn't bw empty")
     private String name;
 
     @Email(message = "User email should be valid address")

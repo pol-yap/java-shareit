@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.common.errors.NotUniqueException;
 
 import java.util.*;
 
@@ -11,7 +10,6 @@ public class UserRepositoryImplInMemory implements UserRepository {
     private long nextUserId = 1;
 
     public User create(User user) {
-        checkEmailUniqueOrThrow(user);
         user.setId(nextUserId);
         users.put(nextUserId, user);
         nextUserId++;
@@ -32,7 +30,6 @@ public class UserRepositoryImplInMemory implements UserRepository {
     }
 
     public User update(Long id, User user) {
-        checkEmailUniqueOrThrow(user);
         users.put(id, user);
 
         return user;
@@ -46,17 +43,11 @@ public class UserRepositoryImplInMemory implements UserRepository {
         return users.containsKey(id);
     }
 
-    private void checkEmailUniqueOrThrow(User user) {
-        if (isDuplicateEmail(user)) {
-            throw new NotUniqueException("User with such email is already exists");
-        }
-    }
-
-    private boolean isDuplicateEmail(User user) {
+    public boolean isEmailUnique(User user) {
         return users.values()
                     .stream()
                     .filter(u -> !Objects.equals(u.getId(), user.getId()))
-                    .anyMatch(u -> u.getEmail().equals(user.getEmail()));
+                    .noneMatch(u -> u.getEmail().equals(user.getEmail()));
     }
 
     private User copyOf(User user) {

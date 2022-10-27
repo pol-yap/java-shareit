@@ -19,7 +19,7 @@ public class ItemService {
     private final UserService userService;
 
     public ItemDto create(ItemDto itemDtoDto, Long userId) {
-        checkUserIdOrThrow(userId);
+        throwIfUserNotExists(userId);
         Item item = mapper.toModel(itemDtoDto);
         item.setOwner(userId);
         item.setAvailable(true);
@@ -49,28 +49,28 @@ public class ItemService {
     }
 
     public ItemDto update(Long itemId, ItemDto itemDto, Long userId) {
-        checkUserIdOrThrow(userId);
+        throwIfUserNotExists(userId);
         Item itemToUpdate = findItemById(itemId);
-        checkItemOwnerOrThrow(itemToUpdate, userId);
+        throwIfUserNotOwner(itemToUpdate, userId);
         Item newItemData = mapper.toModel(itemDto);
         updateItemData(itemToUpdate, newItemData);
 
         return mapper.toDTO(repository.update(itemId, itemToUpdate));
     }
 
-    private void checkUserIdOrThrow(Long userId) {
+    private void throwIfUserNotExists(Long userId) {
         if (! userService.isExists(userId)) {
             throw new NotFoundException(userId, "user");
         }
     }
 
-    private void checkItemIdOrThrow(Long itemId) {
+    private void throwIfItemNotExists(Long itemId) {
         if (! userService.isExists(itemId)) {
             throw new NotFoundException(itemId, "item");
         }
     }
 
-    private void checkItemOwnerOrThrow(Item item, Long userId) {
+    private void throwIfUserNotOwner(Item item, Long userId) {
         if (! Objects.equals(item.getOwner(), userId)) {
             throw new ForbiddenException("user is not owner of item");
         }
@@ -91,6 +91,7 @@ public class ItemService {
     }
 
     private Item findItemById(Long itemId) {
-        return repository.findById(itemId).orElseThrow(() -> new NotFoundException(itemId, "item"));
+        return repository.findById(itemId)
+                         .orElseThrow(() -> new NotFoundException(itemId, "item"));
     }
 }
