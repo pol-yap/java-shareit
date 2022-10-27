@@ -1,8 +1,8 @@
 package ru.practicum.shareit.common;
 
-public interface CommonMapper<TModel, TDto> {
+public interface CommonMapper<T, U> {
 
-    TDto toDTO(TModel model);
+    U toDTO(T model);
 
-    TModel toModel(TDto dto);
+    T toModel(U dto);
 }
