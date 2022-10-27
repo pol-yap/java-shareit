@@ -71,7 +71,7 @@ public class ItemService {
     }
 
     private void checkItemOwnerOrThrow(Item item, Long userId) {
-        if(! Objects.equals(item.getOwner(), userId)) {
+        if (! Objects.equals(item.getOwner(), userId)) {
             throw new ForbiddenException("user is not owner of item");
         }
     }

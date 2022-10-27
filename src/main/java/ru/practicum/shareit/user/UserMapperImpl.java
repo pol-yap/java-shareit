@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapperImpl implements UserMapper{
+public class UserMapperImpl implements UserMapper {
     public UserDto toDTO(User user) {
         return UserDto.builder()
                       .id(user.getId())

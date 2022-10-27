@@ -6,7 +6,7 @@ import ru.practicum.shareit.common.errors.NotUniqueException;
 import java.util.*;
 
 @Repository
-public class UserRepositoryImplInMemory implements UserRepository{
+public class UserRepositoryImplInMemory implements UserRepository {
     private final Map<Long, User> users = new HashMap<>();
     private long nextUserId = 1;
 
