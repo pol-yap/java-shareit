@@ -22,7 +22,7 @@ public class CommonExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String  handleNotFound(NotFoundException e) {
         String message = String.format("Не найден %s с id=%d", e.getEntity(), e.getId());
-        log.debug(message);
+        log.warn(message);
 
         return message;
     }
@@ -30,7 +30,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBadRequest(BadRequestException e) {
-        log.error(e.getMessage());
+        log.warn(e.getMessage());
 
         return e.getMessage();
     }
@@ -38,7 +38,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(NotUniqueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleNotUnique(NotUniqueException e) {
-        log.error(e.getMessage());
+        log.warn(e.getMessage());
 
         return e.getMessage();
     }
@@ -46,7 +46,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleForbidden(ForbiddenException e) {
-        log.error(e.getMessage());
+        log.warn(e.getMessage());
 
         return e.getMessage();
     }
@@ -60,7 +60,7 @@ public class CommonExceptionHandler {
                           .map(DefaultMessageSourceResolvable::getDefaultMessage)
                           .collect(Collectors.toList())
                           .toString();
-        log.error(message);
+        log.warn(message);
 
         return message;
     }
