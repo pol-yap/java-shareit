@@ -21,10 +21,10 @@ public class ItemService {
     public ItemDto create(ItemDto itemDtoDto, Long userId) {
         throwIfUserNotExists(userId);
         Item item = mapper.toModel(itemDtoDto);
-        item.setOwner(userId);
+        item.setOwnerId(userId);
         item.setAvailable(true);
 
-        return mapper.toDTO(repository.create(item));
+        return mapper.toDTO(repository.save(item));
     }
 
     public ItemDto findById(Long itemId) {
@@ -32,7 +32,7 @@ public class ItemService {
     }
 
     public List<ItemDto> findAllByOwner(Long userId) {
-        return repository.findAllByOwner(userId)
+        return repository.findByOwnerId(userId)
                          .stream()
                          .map(mapper::toDTO)
                          .collect(Collectors.toList());
@@ -42,7 +42,8 @@ public class ItemService {
         if (criteria.isBlank()) {
             return new ArrayList<>();
         }
-        return repository.search(criteria)
+
+        return repository.search("%" + criteria + "%")
                          .stream()
                          .map(mapper::toDTO)
                          .collect(Collectors.toList());
@@ -50,12 +51,12 @@ public class ItemService {
 
     public ItemDto update(Long itemId, ItemDto itemDto, Long userId) {
         throwIfUserNotExists(userId);
-        Item itemToUpdate = findItemById(itemId);
-        throwIfUserNotOwner(itemToUpdate, userId);
-        Item newItemData = mapper.toModel(itemDto);
-        updateItemData(itemToUpdate, newItemData);
+        Item item = findItemById(itemId);
+        throwIfUserNotOwner(item, userId);
+        updateItemData(item, mapper.toModel(itemDto));
+        repository.save(item);
 
-        return mapper.toDTO(repository.update(itemId, itemToUpdate));
+        return mapper.toDTO(item);
     }
 
     private void throwIfUserNotExists(Long userId) {
@@ -71,7 +72,7 @@ public class ItemService {
     }
 
     private void throwIfUserNotOwner(Item item, Long userId) {
-        if (! Objects.equals(item.getOwner(), userId)) {
+        if (! Objects.equals(item.getOwnerId(), userId)) {
             throw new ForbiddenException("user is not owner of item");
         }
     }

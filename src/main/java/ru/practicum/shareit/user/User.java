@@ -1,15 +1,16 @@
 package ru.practicum.shareit.user;
 
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Builder
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+
+@Entity
 @Table(name = "users")
 public class User {
 
