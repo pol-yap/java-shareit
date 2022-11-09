@@ -12,6 +12,7 @@ import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.common.errors.NotUniqueException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -63,5 +64,11 @@ public class CommonExceptionHandler {
         log.warn(message);
 
         return message;
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleConstraintViolation(ConstraintViolationException e) {
+        return e.getMessage();
     }
 }

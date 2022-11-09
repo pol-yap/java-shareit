@@ -1,7 +1,8 @@
 package ru.practicum.shareit.user;
 
-import ru.practicum.shareit.common.CommonCRUDRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends CommonCRUDRepository<User> {
-    boolean isEmailUnique(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
 }

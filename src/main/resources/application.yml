@@ -1,5 +1,12 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shareit
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
   jpa:
+    show-sql: true
+    open-in-view: false
     hibernate:
       ddl-auto: none
     properties:
@@ -13,6 +20,10 @@ spring:
     activate:
       on-profile: ci,test
 
+javax.persistence.schema-generation:
+  database.action: create
+  create-script-source: schema.sql
+
 logging:
   level:
     ru.practicum.shareit: DEBUG
@@ -22,3 +33,6 @@ logging:
           jpa.JpaTransactionManager: DEBUG
         transaction: INFO
         transaction.interceptor: TRACE
+    org:
+      hibernate:
+        type: trace

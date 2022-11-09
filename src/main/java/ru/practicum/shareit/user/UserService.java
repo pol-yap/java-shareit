@@ -1,10 +1,13 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.common.errors.NotUniqueException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,17 +19,17 @@ public class UserService {
 
     public UserDto create(UserDto userDto) {
         User user = mapper.toModel(userDto);
-        throwIfEmailNotUnique(user);
-        return mapper.toDTO(repository.create(user));
+        repository.save(user);
+
+        return mapper.toDTO(user);
     }
 
     public UserDto update(Long userId, UserDto userDto) {
-        User userToUpdate = findUserById(userId);
-        User newUserData = mapper.toModel(userDto);
-        updateUserData(userToUpdate, newUserData);
-        throwIfEmailNotUnique(userToUpdate);
+        User user = findUserById(userId);
+        updateUserData(user, mapper.toModel(userDto));
+        repository.save(user);
 
-        return mapper.toDTO(repository.update(userId, userToUpdate));
+        return mapper.toDTO(user);
     }
 
     public UserDto findById(Long userId) {
@@ -45,7 +48,7 @@ public class UserService {
     }
 
     public boolean isExists(Long userId) {
-        return repository.isExists(userId);
+        return repository.existsById(userId);
     }
 
     private User findUserById(Long userId) {
@@ -64,8 +67,8 @@ public class UserService {
     }
 
     private void throwIfEmailNotUnique(User user) {
-        if (! repository.isEmailUnique(user)) {
-            throw new NotUniqueException("User with such email is already exists");
-        }
+//        if (! repository.isEmailUnique(user)) {
+//            throw new NotUniqueException("User with such email is already exists");
+//        }
     }
 }
