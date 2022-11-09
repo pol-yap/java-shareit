@@ -1,13 +1,10 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.common.errors.NotFoundException;
-import ru.practicum.shareit.common.errors.NotUniqueException;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +16,7 @@ public class UserService {
 
     public UserDto create(UserDto userDto) {
         User user = mapper.toModel(userDto);
-        repository.save(user);
+        repository.saveAndFlush(user);
 
         return mapper.toDTO(user);
     }
@@ -27,7 +24,7 @@ public class UserService {
     public UserDto update(Long userId, UserDto userDto) {
         User user = findUserById(userId);
         updateUserData(user, mapper.toModel(userDto));
-        repository.save(user);
+        repository.saveAndFlush(user);
 
         return mapper.toDTO(user);
     }

@@ -2,6 +2,7 @@ package ru.practicum.shareit.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,9 +67,11 @@ public class CommonExceptionHandler {
         return message;
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleConstraintViolation(ConstraintViolationException e) {
-        return e.getMessage();
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleConstraintViolation(DataIntegrityViolationException e) {
+        log.warn(e.getMessage());
+
+        return "Data constraint violation";
     }
 }
