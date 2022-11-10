@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.user.UserService;
@@ -18,6 +19,7 @@ public class ItemService {
     private final ItemMapper mapper;
     private final UserService userService;
 
+    @Transactional
     public ItemDto create(ItemDto itemDtoDto, Long userId) {
         throwIfUserNotExists(userId);
         Item item = mapper.toModel(itemDtoDto);
@@ -25,6 +27,16 @@ public class ItemService {
         item.setAvailable(true);
 
         return mapper.toDTO(repository.save(item));
+    }
+
+    @Transactional
+    public ItemDto update(Long itemId, ItemDto itemDto, Long userId) {
+        throwIfUserNotExists(userId);
+        Item item = findItemById(itemId);
+        throwIfUserNotOwner(item, userId);
+        updateItemData(item, mapper.toModel(itemDto));
+
+        return mapper.toDTO(item);
     }
 
     public ItemDto findById(Long itemId) {
@@ -47,16 +59,6 @@ public class ItemService {
                          .stream()
                          .map(mapper::toDTO)
                          .collect(Collectors.toList());
-    }
-
-    public ItemDto update(Long itemId, ItemDto itemDto, Long userId) {
-        throwIfUserNotExists(userId);
-        Item item = findItemById(itemId);
-        throwIfUserNotOwner(item, userId);
-        updateItemData(item, mapper.toModel(itemDto));
-        repository.save(item);
-
-        return mapper.toDTO(item);
     }
 
     private void throwIfUserNotExists(Long userId) {
