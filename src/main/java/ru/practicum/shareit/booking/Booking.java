@@ -37,7 +37,7 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    private BookingState status;
+    private BookingStatus status;
 
     @Override
     public boolean equals(Object o) {

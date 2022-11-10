@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/bookings")
@@ -27,20 +28,29 @@ public class BookingController {
     public BookingDto updateState(@RequestHeader("X-Sharer-User-Id") long userId,
                                    @RequestParam("approved") boolean approved,
                                    @PathVariable("bookingId") long bookingId) {
-        return null;
+        return service.approveBooking(bookingId, userId, approved);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> findAll(@RequestHeader("X-Sharer-User-Id") long userId,
-                                    @RequestParam("state") BookingState state) {
-        return null;
+    public List<BookingDto> findAllOfBooker(@RequestHeader("X-Sharer-User-Id") long userId,
+                                            @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
+
+        return service.findAllOfBooker(userId, status.orElse(BookingStatus.ALL));
+    }
+
+    @GetMapping(path = "/owner")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookingDto> findAllOfOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+                                           @Valid @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
+
+        return service.findAllOfOwner(userId, status.orElse(BookingStatus.ALL));
     }
 
     @GetMapping(path = "/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto findById(@RequestHeader("X-Sharer-User-Id") long userId,
                                @PathVariable("bookingId") long bookingId) {
-        return null;
+        return service.findById(bookingId, userId);
     }
 }

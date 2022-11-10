@@ -47,8 +47,8 @@ CREATE SEQUENCE IF NOT EXISTS public.item_sequence
 CREATE TABLE IF NOT EXISTS public.bookings
 (
     id bigint NOT NULL,
-    end_date date NOT NULL,
-    start_date date NOT NULL,
+    start_date timestamp NOT NULL,
+    end_date timestamp NOT NULL,
     status character varying(255),
     booker_id bigint,
     item_id bigint,

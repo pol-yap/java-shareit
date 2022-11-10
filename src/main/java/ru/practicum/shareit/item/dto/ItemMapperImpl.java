@@ -10,6 +10,7 @@ public class ItemMapperImpl implements ItemMapper {
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
+        dto.setOwnerId(item.getOwnerId());
         dto.setAvailable(item.getAvailable());
 
         return dto;
@@ -20,6 +21,7 @@ public class ItemMapperImpl implements ItemMapper {
         item.setId(dto.getId());
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
+        item.setOwnerId(dto.getOwnerId());
         item.setAvailable(dto.getAvailable());
 
         return item;

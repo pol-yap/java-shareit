@@ -2,7 +2,7 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.BookingState;
+import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
@@ -31,5 +31,5 @@ public class BookingDto {
 
     private User booker;
 
-    private BookingState status;
+    private BookingStatus status;
 }
