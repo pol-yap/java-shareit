@@ -13,6 +13,8 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookingService {
@@ -27,9 +29,19 @@ public class BookingService {
         Booking booking = bookingMapper.fromDtoCreate(dto);
         enrich(booking, userId, dto.getItemId());
         validate(booking);
+        booking.setStatus(BookingState.WAITING);
         repository.save(booking);
 
         return bookingMapper.toDto(booking);
+    }
+
+    public BookingDto updateStatus(Long bookingId, Long userId, BookingState status) {
+        return null;
+    }
+
+    public List<BookingDto> findAllOfBooker(Long userId, BookingState state) {
+        //User user = userM userService.findById(userId);
+        return null;
     }
 
     private void enrich(Booking booking, Long userId, Long itemId) {

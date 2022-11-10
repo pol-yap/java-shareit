@@ -8,7 +8,7 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -23,10 +23,10 @@ public class Booking {
     private Long id;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -37,7 +37,7 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    private BookingState status;
 
     @Override
     public boolean equals(Object o) {
