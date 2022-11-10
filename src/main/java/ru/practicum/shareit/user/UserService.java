@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.common.errors.NotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserDtoCreate;
+import ru.practicum.shareit.user.dto.UserMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,29 +17,29 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
 
-    public UserDto create(UserDto userDto) {
-        User user = mapper.toModel(userDto);
+    public UserDto create(UserDtoCreate userDto) {
+        User user = mapper.fromDtoCreate(userDto);
         repository.saveAndFlush(user);
 
-        return mapper.toDTO(user);
+        return mapper.toDto(user);
     }
 
     @Transactional
     public UserDto update(Long userId, UserDto userDto) {
         User user = findUserById(userId);
-        updateUserData(user, mapper.toModel(userDto));
+        updateUserData(user, mapper.fromDto(userDto));
 
-        return mapper.toDTO(user);
+        return mapper.toDto(user);
     }
 
     public UserDto findById(Long userId) {
-        return mapper.toDTO(findUserById(userId));
+        return mapper.toDto(findUserById(userId));
     }
 
     public List<UserDto> findAll() {
         return repository.findAll()
                          .stream()
-                         .map(mapper::toDTO)
+                         .map(mapper::toDto)
                          .collect(Collectors.toList());
     }
 

@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreate;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.user.UserService;
 
 import java.util.ArrayList;
@@ -20,13 +23,13 @@ public class ItemService {
     private final UserService userService;
 
     @Transactional
-    public ItemDto create(ItemDto itemDtoDto, Long userId) {
+    public ItemDto create(ItemDtoCreate itemDtoDto, Long userId) {
         throwIfUserNotExists(userId);
-        Item item = mapper.toModel(itemDtoDto);
+        Item item = mapper.fromDtoCreate(itemDtoDto);
         item.setOwnerId(userId);
         item.setAvailable(true);
 
-        return mapper.toDTO(repository.save(item));
+        return mapper.toDto(repository.save(item));
     }
 
     @Transactional
@@ -34,19 +37,19 @@ public class ItemService {
         throwIfUserNotExists(userId);
         Item item = findItemById(itemId);
         throwIfUserNotOwner(item, userId);
-        updateItemData(item, mapper.toModel(itemDto));
+        updateItemData(item, mapper.fromDto(itemDto));
 
-        return mapper.toDTO(item);
+        return mapper.toDto(item);
     }
 
     public ItemDto findById(Long itemId) {
-        return mapper.toDTO(findItemById(itemId));
+        return mapper.toDto(findItemById(itemId));
     }
 
     public List<ItemDto> findAllByOwner(Long userId) {
         return repository.findByOwnerId(userId)
                          .stream()
-                         .map(mapper::toDTO)
+                         .map(mapper::toDto)
                          .collect(Collectors.toList());
     }
 
@@ -57,7 +60,7 @@ public class ItemService {
 
         return repository.search("%" + criteria + "%")
                          .stream()
-                         .map(mapper::toDTO)
+                         .map(mapper::toDto)
                          .collect(Collectors.toList());
     }
 

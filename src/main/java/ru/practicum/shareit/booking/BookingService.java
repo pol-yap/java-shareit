@@ -2,12 +2,15 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoCreate;
+import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.common.errors.BadRequestException;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
 @Service
@@ -20,21 +23,20 @@ public class BookingService {
     private final UserMapper userMapper;
     private final ItemMapper itemMapper;
 
-    public BookingDto create(BookingDto dto, Long userId) {
-        enrichData(dto, userId);
-        //validate();
-        Booking booking = bookingMapper.toModel(dto);
+    public BookingDto create(BookingDtoCreate dto, Long userId) {
+        Booking booking = bookingMapper.fromDtoCreate(dto);
+        enrich(booking, userId, dto.getItemId());
+        validate(booking);
         repository.save(booking);
 
-        return bookingMapper.toDTO(booking);
+        return bookingMapper.toDto(booking);
     }
 
-    private void enrichData(BookingDto dto, Long userId) {
-        User user = userMapper.toModel(userService.findById(userId));
-        Item item = itemMapper.toModel(itemService.findById(dto.getItemId()));
-        dto.setBookerId(userId);
-        dto.setBooker(user);
-        dto.setItem(item);
+    private void enrich(Booking booking, Long userId, Long itemId) {
+        User user = userMapper.fromDto(userService.findById(userId));
+        Item item = itemMapper.fromDto(itemService.findById(itemId));
+        booking.setBooker(user);
+        booking.setItem(item);
     }
 
     private void validate(Booking booking) {

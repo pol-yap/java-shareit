@@ -1,5 +1,4 @@
-package ru.practicum.shareit.booking;
-
+package ru.practicum.shareit.booking.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class BookingDto {
-
-    private Long id;
+public class BookingDtoCreate {
 
     @NotNull(message = "Booking start date shouldn't be empty")
     @FutureOrPresent(message = "We can't book anything in the past")
@@ -26,12 +23,4 @@ public class BookingDto {
 
     @NotNull(message = "Booking item's ID shouldn't be empty")
     private Long itemId;
-
-    private Item item;
-
-    private Long bookerId;
-
-    private User booker;
-
-    private BookingStatus status;
 }

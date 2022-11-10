@@ -1,8 +1,10 @@
 package ru.practicum.shareit.common;
 
-public interface CommonMapper<T, U> {
+public interface CommonMapper<E, U, C> {
 
-    U toDTO(T model);
+    U toDto(E entity);
 
-    T toModel(U dto);
+    E fromDto(U dto);
+
+    E fromDtoCreate(C dtoCreate);
 }

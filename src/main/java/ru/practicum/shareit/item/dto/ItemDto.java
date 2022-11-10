@@ -1,10 +1,9 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +17,5 @@ public class ItemDto {
     @NotBlank(message = "Item description shouldn't be empty")
     private String description;
 
-    @NotNull(message = "Availability of item should be defined")
     private Boolean available;
 }

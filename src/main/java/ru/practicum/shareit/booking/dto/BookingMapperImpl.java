@@ -1,10 +1,11 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.dto;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.Booking;
 
 @Component
 public class BookingMapperImpl implements BookingMapper{
-    public BookingDto toDTO(Booking booking) {
+    public BookingDto toDto(Booking booking) {
         BookingDto dto = new BookingDto();
         dto.setId(booking.getId());
         dto.setStart(booking.getStartDate());
@@ -22,7 +23,7 @@ public class BookingMapperImpl implements BookingMapper{
         return dto;
     }
 
-    public Booking toModel(BookingDto dto) {
+    public Booking fromDto(BookingDto dto) {
         Booking booking = new Booking();
         booking.setId(dto.getId());
         booking.setStartDate(dto.getStart());
@@ -30,6 +31,14 @@ public class BookingMapperImpl implements BookingMapper{
         booking.setItem(dto.getItem());
         booking.setBooker(dto.getBooker());
         booking.setStatus(dto.getStatus());
+
+        return booking;
+    }
+
+    public Booking fromDtoCreate(BookingDtoCreate dto) {
+        Booking booking = new Booking();
+        booking.setStartDate(dto.getStart());
+        booking.setEndDate(dto.getEnd());
 
         return booking;
     }
