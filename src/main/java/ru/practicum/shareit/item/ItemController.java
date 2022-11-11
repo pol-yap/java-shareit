@@ -38,8 +38,9 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto findById(@PathVariable long itemId) {
-        return service.findById(itemId);
+    public ItemDto findById(@PathVariable long itemId,
+                            @RequestHeader("X-Sharer-User-Id") long userId) {
+        return service.findById(itemId, userId);
     }
 
     @GetMapping("/search")

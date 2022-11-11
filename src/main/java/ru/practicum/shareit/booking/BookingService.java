@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -129,7 +130,7 @@ public class BookingService {
 
     private void enrich(Booking booking, Long userId, Long itemId) {
         User user = userMapper.fromDto(userService.findById(userId));
-        Item item = itemMapper.fromDto(itemService.findById(itemId));
+        Item item = itemMapper.fromDto(itemService.findById(itemId, userId));
         booking.setBooker(user);
         booking.setItem(item);
     }

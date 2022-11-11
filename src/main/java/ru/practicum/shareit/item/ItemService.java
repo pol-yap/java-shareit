@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -10,9 +11,8 @@ import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.user.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,11 +42,18 @@ public class ItemService {
         return mapper.toDto(item);
     }
 
-    public ItemDto findById(Long itemId) {
-        return mapper.toDto(findItemById(itemId));
+    @Transactional
+    public ItemDto findById(Long itemId, Long userId) {
+        Item item = findItemById(itemId);
+        findBookings(item, userId);
+        return mapper.toDto(item);
     }
 
-    public List<ItemDto> findAllByOwner(Long userId) {
+    @Transactional
+    public List<ItemDto> findAllByOwner(final Long userId) {
+        List<Item> items = repository.findByOwnerId(userId);
+        items.forEach(i->findBookings(i, userId));
+
         return repository.findByOwnerId(userId)
                          .stream()
                          .map(mapper::toDto)
@@ -99,5 +106,24 @@ public class ItemService {
     private Item findItemById(Long itemId) {
         return repository.findById(itemId)
                          .orElseThrow(() -> new NotFoundException(itemId, "item"));
+    }
+
+    private void findBookings(Item item, Long userId) {
+        if (item.getOwnerId().equals(userId)) {
+            item.setNextBooking(findNextBooking(item.getBookings()).orElse(null));
+            item.setLastBooking(findLastBooking(item.getBookings()).orElse(null));
+        }
+    }
+
+    private Optional<Booking> findNextBooking(List<Booking> bookings) {
+        return bookings.stream()
+                       .filter(b -> b.getStartDate().isAfter(LocalDateTime.now()))
+                       .min(Comparator.comparing(Booking::getStartDate));
+    }
+
+    private Optional<Booking> findLastBooking(List<Booking> bookings) {
+        return bookings.stream()
+                       .filter(b -> b.getEndDate().isBefore(LocalDateTime.now()))
+                       .max(Comparator.comparing(Booking::getEndDate));
     }
 }

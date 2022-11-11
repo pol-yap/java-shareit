@@ -1,9 +1,12 @@
 package ru.practicum.shareit.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -32,9 +35,13 @@ public class Item {
     @Column(name = "owner_id")
     private Long ownerId;
 
+    @OneToMany(mappedBy = "item")
+    @JsonIgnore
+    private List<Booking> bookings;
+
     @Transient
     private Booking nextBooking;
 
     @Transient
-    private Boolean pastBooking;
+    private Booking lastBooking;
 }

@@ -24,10 +24,10 @@ public class UserService {
         return mapper.toDto(user);
     }
 
-    @Transactional
     public UserDto update(Long userId, UserDto userDto) {
         User user = findUserById(userId);
         updateUserData(user, mapper.fromDto(userDto));
+        repository.saveAndFlush(user);
 
         return mapper.toDto(user);
     }
