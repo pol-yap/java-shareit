@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.*;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.booking.Booking;
 
 import javax.persistence.*;
 
@@ -15,8 +15,9 @@ public class Item {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_seq")
-    @SequenceGenerator(name = "item_seq", sequenceName = "item_sequence", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_seq")
+//    @SequenceGenerator(name = "item_seq", sequenceName = "item_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
@@ -31,6 +32,9 @@ public class Item {
     @Column(name = "owner_id")
     private Long ownerId;
 
-    @Column(name = "request")
-    private Long request;
+    @Transient
+    private Booking nextBooking;
+
+    @Transient
+    private Boolean pastBooking;
 }
