@@ -60,7 +60,7 @@ public class BookingService {
     }
 
     public List<BookingDto> findAllOfBooker(Long userId, BookingStatus status) {
-        User user = userMapper.fromDto(userService.findById(userId));
+        userService.throwIfNoUser(userId);
         List<Booking> result;
 
         switch (status) {
@@ -99,7 +99,7 @@ public class BookingService {
     }
 
     public List<BookingDto> findAllOfOwner(Long userId, BookingStatus status) {
-        User user = userMapper.fromDto(userService.findById(userId));
+        userService.throwIfNoUser(userId);
         List<Booking> result;
         switch (status) {
             case REJECTED:

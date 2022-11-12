@@ -46,8 +46,10 @@ public class UserService {
         repository.deleteById(userId);
     }
 
-    public boolean isExists(Long userId) {
-        return repository.existsById(userId);
+    public void throwIfNoUser(Long userId) {
+        if (!repository.existsById(userId)) {
+            throw new NotFoundException(userId, "user");
+        }
     }
 
     private User findUserById(Long userId) {

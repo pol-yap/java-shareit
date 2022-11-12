@@ -29,7 +29,7 @@ public class ItemService {
 
     @Transactional
     public ItemDto create(ItemDtoCreate itemDto, Long userId) {
-        throwIfUserNotExists(userId);
+        userService.throwIfNoUser(userId);
         Item item = mapper.fromDtoCreate(itemDto);
         item.setOwnerId(userId);
         item.setAvailable(true);
@@ -39,7 +39,7 @@ public class ItemService {
 
     @Transactional
     public ItemDto update(Long itemId, ItemDto itemDto, Long userId) {
-        throwIfUserNotExists(userId);
+        userService.throwIfNoUser(userId);
         Item item = findItemById(itemId);
         throwIfUserNotOwner(item, userId);
         updateItemData(item, mapper.fromDto(itemDto));
@@ -57,7 +57,7 @@ public class ItemService {
     @Transactional
     public List<ItemDto> findAllByOwner(final Long userId) {
         List<Item> items = repository.findByOwnerId(userId);
-        items.forEach(i-> enrichByLastAndNextBookings(i, userId));
+        items.forEach(i -> enrichByLastAndNextBookings(i, userId));
 
         return repository.findByOwnerId(userId)
                          .stream()
@@ -90,22 +90,6 @@ public class ItemService {
         commentRepository.saveAndFlush(comment);
 
         return commentMapper.toDto(comment);
-    }
-
-    public boolean isExists(Long itemId) {
-        return repository.existsById(itemId);
-    }
-
-    private void throwIfUserNotExists(Long userId) {
-        if (! userService.isExists(userId)) {
-            throw new NotFoundException(userId, "user");
-        }
-    }
-
-    private void throwIfItemNotExists(Long itemId) {
-        if (! isExists(itemId)) {
-            throw new NotFoundException(itemId, "item");
-        }
     }
 
     private void throwIfUserNotOwner(Item item, Long userId) {
