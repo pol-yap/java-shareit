@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -67,15 +66,27 @@ public class BookingService {
         switch (status) {
             case REJECTED:
             case WAITING:
-                result = repository.findByBooker_IdAndStatusOrderByStartDateDesc(userId, status);
+                result = repository.findByBooker_IdAndStatusOrderByStartDateDesc(
+                        userId,
+                        status);
                 break;
 
             case FUTURE:
-                result = repository.findByBooker_IdAndStartDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
+                result = repository.findByBooker_IdAndStartDateAfterOrderByStartDateDesc(
+                        userId,
+                        LocalDateTime.now());
                 break;
 
             case PAST:
-                result = repository.findByBooker_IdAndEndDateBeforeOrderByStartDateDesc(userId, LocalDateTime.now());
+                result = repository.findByBooker_IdAndEndDateBeforeOrderByStartDateDesc(
+                        userId,
+                        LocalDateTime.now());
+                break;
+
+            case CURRENT:
+                result = repository.findBookersCurrentBookings(
+                        userId,
+                        LocalDateTime.now());
                 break;
 
             default:
@@ -102,6 +113,12 @@ public class BookingService {
 
             case PAST:
                 result = repository.findByItem_OwnerIdAndEndDateBeforeOrderByStartDateDesc(userId, LocalDateTime.now());
+                break;
+
+            case CURRENT:
+                result = repository.findOwnersCurrentBookings(
+                        userId,
+                        LocalDateTime.now());
                 break;
 
             default:

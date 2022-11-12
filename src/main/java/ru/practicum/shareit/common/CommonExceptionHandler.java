@@ -30,10 +30,10 @@ public class CommonExceptionHandler {
         return handleAndResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-//    @ExceptionHandler(NotUniqueException.class)
-//    public ResponseEntity<ErrorMessage> handleNotUnique(NotUniqueException e) {
-//        return handleAndResponse(HttpStatus.CONFLICT, e.getMessage());
-//    }
+    @ExceptionHandler(NotUniqueException.class)
+    public ResponseEntity<ErrorMessage> handleNotUnique(NotUniqueException e) {
+        return handleAndResponse(HttpStatus.CONFLICT, e.getMessage());
+    }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorMessage> handleForbidden(ForbiddenException e) {
@@ -52,10 +52,10 @@ public class CommonExceptionHandler {
         return handleAndResponse(HttpStatus.BAD_REQUEST, message);
     }
 
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    public ResponseEntity<ErrorMessage> handleConstraintViolation(DataIntegrityViolationException e) {
-//        return handleAndResponse(HttpStatus.CONFLICT, "Data constraint violation");
-//    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessage> handleConstraintViolation(DataIntegrityViolationException e) {
+        return handleAndResponse(HttpStatus.CONFLICT, "Data constraint violation");
+    }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorMessage> handleRequestParamViolation(MethodArgumentTypeMismatchException e) {

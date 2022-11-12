@@ -1,10 +1,8 @@
 package ru.practicum.shareit.user;
 
 import lombok.*;
-import ru.practicum.shareit.booking.Booking;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
