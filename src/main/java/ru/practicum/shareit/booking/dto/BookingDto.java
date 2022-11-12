@@ -7,7 +7,6 @@ import ru.practicum.shareit.item.dto.ItemDtoBrief;
 import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data

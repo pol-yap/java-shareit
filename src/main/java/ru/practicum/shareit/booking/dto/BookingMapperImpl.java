@@ -10,7 +10,7 @@ import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 @Component
 @RequiredArgsConstructor
-public class BookingMapperImpl implements BookingMapper{
+public class BookingMapperImpl implements BookingMapper {
     public BookingDto toDto(Booking booking) {
         BookingDto dto = new BookingDto();
         dto.setId(booking.getId());

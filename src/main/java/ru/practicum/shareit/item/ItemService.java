@@ -137,7 +137,7 @@ public class ItemService {
     }
 
     private void throwIfUserNotBookedItem(Item item, Long userId) {
-        if(item.getBookings()
+        if (item.getBookings()
                .stream()
                 .filter(b -> b.getStatus().equals(BookingStatus.APPROVED))
                 .filter(b -> b.getEndDate().isBefore(LocalDateTime.now()))
