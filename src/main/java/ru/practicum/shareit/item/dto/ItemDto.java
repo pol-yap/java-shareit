@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,4 +26,6 @@ public class ItemDto {
     private BookingDtoBrief nextBooking;
 
     private BookingDtoBrief lastBooking;
+
+    private List<CommentDto> comments;
 }

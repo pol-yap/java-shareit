@@ -5,9 +5,13 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 import ru.practicum.shareit.item.Item;
 
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class ItemMapperImpl implements ItemMapper {
+    private final CommentMapper commentMapper;
+
     public ItemDto toDto(Item item) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -25,6 +29,9 @@ public class ItemMapperImpl implements ItemMapper {
         } else  {
             dto.setLastBooking(new BookingDtoBrief(item.getLastBooking()));
         }
+        dto.setComments(item.getComments().stream()
+                            .map(commentMapper::toDto)
+                            .collect(Collectors.toList()));
 
         return dto;
     }

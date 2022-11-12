@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.common.errors.BadRequestException;
 import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoCreate;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.dto.UserMapper;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -21,6 +23,9 @@ public class ItemService {
     private final ItemRepository repository;
     private final ItemMapper mapper;
     private final UserService userService;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
+    private final UserMapper userMapper;
 
     @Transactional
     public ItemDto create(ItemDtoCreate itemDtoDto, Long userId) {
@@ -45,14 +50,14 @@ public class ItemService {
     @Transactional
     public ItemDto findById(Long itemId, Long userId) {
         Item item = findItemById(itemId);
-        findBookings(item, userId);
+        enrichByLastAndNextBookings(item, userId);
         return mapper.toDto(item);
     }
 
     @Transactional
     public List<ItemDto> findAllByOwner(final Long userId) {
         List<Item> items = repository.findByOwnerId(userId);
-        items.forEach(i->findBookings(i, userId));
+        items.forEach(i-> enrichByLastAndNextBookings(i, userId));
 
         return repository.findByOwnerId(userId)
                          .stream()
@@ -60,6 +65,7 @@ public class ItemService {
                          .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<ItemDto> search(String criteria) {
         if (criteria.isBlank()) {
             return new ArrayList<>();
@@ -71,6 +77,25 @@ public class ItemService {
                          .collect(Collectors.toList());
     }
 
+    @Transactional
+    public CommentDto addComment(Long itemId, Long userId, CommentDtoCreate commentDtoCreate) {
+        Item item = findItemById(itemId);
+        User user = userMapper.fromDto(userService.findById(userId));
+        throwIfUserNotBookedItem(item, userId);
+
+        Comment comment = commentMapper.fromDtoCreate(commentDtoCreate);
+        comment.setCreated(LocalDateTime.now());
+        comment.setAuthor(user);
+        comment.setItem(item);
+        commentRepository.saveAndFlush(comment);
+
+        return commentMapper.toDto(comment);
+    }
+
+    public boolean isExists(Long itemId) {
+        return repository.existsById(itemId);
+    }
+
     private void throwIfUserNotExists(Long userId) {
         if (! userService.isExists(userId)) {
             throw new NotFoundException(userId, "user");
@@ -78,7 +103,7 @@ public class ItemService {
     }
 
     private void throwIfItemNotExists(Long itemId) {
-        if (! userService.isExists(itemId)) {
+        if (! isExists(itemId)) {
             throw new NotFoundException(itemId, "item");
         }
     }
@@ -108,7 +133,7 @@ public class ItemService {
                          .orElseThrow(() -> new NotFoundException(itemId, "item"));
     }
 
-    private void findBookings(Item item, Long userId) {
+    private void enrichByLastAndNextBookings(Item item, Long userId) {
         if (item.getOwnerId().equals(userId)) {
             item.setNextBooking(findNextBooking(item.getBookings()).orElse(null));
             item.setLastBooking(findLastBooking(item.getBookings()).orElse(null));
@@ -125,5 +150,15 @@ public class ItemService {
         return bookings.stream()
                        .filter(b -> b.getEndDate().isBefore(LocalDateTime.now()))
                        .max(Comparator.comparing(Booking::getEndDate));
+    }
+
+    private void throwIfUserNotBookedItem(Item item, Long userId) {
+        if(item.getBookings()
+               .stream()
+                .filter(b -> b.getStatus().equals(BookingStatus.APPROVED))
+                .filter(b -> b.getEndDate().isBefore(LocalDateTime.now()))
+               .noneMatch(b -> b.getBooker().getId().equals(userId))) {
+            throw new BadRequestException("User shouldn't comment item he's never booked");
+        }
     }
 }

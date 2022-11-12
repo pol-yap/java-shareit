@@ -4,6 +4,7 @@ import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,8 +34,11 @@ public class Item {
     @Column(name = "owner_id")
     private Long ownerId;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     @Transient
     private Booking nextBooking;
