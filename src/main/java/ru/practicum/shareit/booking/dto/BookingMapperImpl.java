@@ -3,7 +3,9 @@ package ru.practicum.shareit.booking.dto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.ItemDtoBrief;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 @Component
@@ -15,20 +17,8 @@ public class BookingMapperImpl implements BookingMapper{
         dto.setStart(booking.getStartDate());
         dto.setEnd(booking.getEndDate());
         dto.setStatus(booking.getStatus());
-
-        if (booking.getItem() == null) {
-            dto.setItem(null);
-        } else {
-            dto.setItem(new ItemDtoBrief(booking.getItem()));
-            dto.setItemId(booking.getItem().getId());
-        }
-
-        if (booking.getBooker() == null) {
-            dto.setBooker(null);
-        } else {
-            dto.setBooker(new UserDtoBrief(booking.getBooker()));
-            dto.setBookerId(booking.getBooker().getId());
-        }
+        dto.setItem(getNullableItem(booking.getItem()));
+        dto.setBooker(getNullableUser(booking.getBooker()));
 
         return dto;
     }
@@ -57,5 +47,17 @@ public class BookingMapperImpl implements BookingMapper{
         dto.setBookerId(booking.getBooker().getId());
 
         return dto;
+    }
+
+    private ItemDtoBrief getNullableItem(Item item) {
+        if (item == null) return null;
+
+        return new ItemDtoBrief(item);
+    }
+
+    private UserDtoBrief getNullableUser(User user) {
+        if (user == null) return null;
+
+        return new UserDtoBrief(user);
     }
 }

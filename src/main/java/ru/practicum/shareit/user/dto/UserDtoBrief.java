@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.User;
 @Setter
 @NoArgsConstructor
 public class UserDtoBrief {
+
     private Long id;
 
     public UserDtoBrief(User user) {

@@ -22,12 +22,7 @@ public class BookingDto {
     @FutureOrPresent(message = "We can't book anything in the past")
     private LocalDateTime end;
 
-    @NotNull(message = "Booking item's ID shouldn't be empty")
-    private Long itemId;
-
     private ItemDtoBrief item;
-
-    private Long bookerId;
 
     private UserDtoBrief booker;
 

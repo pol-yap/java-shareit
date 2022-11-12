@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 import ru.practicum.shareit.item.Item;
 
@@ -19,16 +20,8 @@ public class ItemMapperImpl implements ItemMapper {
         dto.setDescription(item.getDescription());
         dto.setOwnerId(item.getOwnerId());
         dto.setAvailable(item.getAvailable());
-        if (item.getNextBooking() == null) {
-            dto.setNextBooking(null);
-        } else  {
-            dto.setNextBooking(new BookingDtoBrief(item.getNextBooking()));
-        }
-        if (item.getLastBooking() == null) {
-            dto.setLastBooking(null);
-        } else  {
-            dto.setLastBooking(new BookingDtoBrief(item.getLastBooking()));
-        }
+        dto.setNextBooking(getNullableBooking(item.getNextBooking()));
+        dto.setLastBooking(getNullableBooking(item.getLastBooking()));
         dto.setComments(item.getComments().stream()
                             .map(commentMapper::toDto)
                             .collect(Collectors.toList()));
@@ -54,5 +47,11 @@ public class ItemMapperImpl implements ItemMapper {
         item.setAvailable(dto.getAvailable());
 
         return item;
+    }
+
+    private BookingDtoBrief getNullableBooking(Booking booking) {
+        if (booking == null) return null;
+
+        return new BookingDtoBrief(booking);
     }
 }

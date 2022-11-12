@@ -28,9 +28,9 @@ public class ItemService {
     private final UserMapper userMapper;
 
     @Transactional
-    public ItemDto create(ItemDtoCreate itemDtoDto, Long userId) {
+    public ItemDto create(ItemDtoCreate itemDto, Long userId) {
         throwIfUserNotExists(userId);
-        Item item = mapper.fromDtoCreate(itemDtoDto);
+        Item item = mapper.fromDtoCreate(itemDto);
         item.setOwnerId(userId);
         item.setAvailable(true);
 

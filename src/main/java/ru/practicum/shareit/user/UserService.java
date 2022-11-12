@@ -64,10 +64,4 @@ public class UserService {
             user.setName(dataToUpdate.getName());
         }
     }
-
-    private void throwIfEmailNotUnique(User user) {
-//        if (! repository.isEmailUnique(user)) {
-//            throw new NotUniqueException("User with such email is already exists");
-//        }
-    }
 }
