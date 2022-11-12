@@ -2,10 +2,8 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.dto.BookingForItemDto;
+import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -24,7 +22,7 @@ public class ItemDto {
 
     private Long ownerId;
 
-    private BookingForItemDto nextBooking;
+    private BookingDtoBrief nextBooking;
 
-    private BookingForItemDto lastBooking;
+    private BookingDtoBrief lastBooking;
 }

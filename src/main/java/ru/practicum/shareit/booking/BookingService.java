@@ -2,14 +2,12 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.common.errors.BadRequestException;
-import ru.practicum.shareit.common.errors.ForbiddenException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.ItemMapper;

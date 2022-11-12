@@ -1,12 +1,10 @@
 package ru.practicum.shareit.booking.dto;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.item.dto.ItemDtoBrief;
+import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -27,11 +25,11 @@ public class BookingDto {
     @NotNull(message = "Booking item's ID shouldn't be empty")
     private Long itemId;
 
-    private Item item;
+    private ItemDtoBrief item;
 
     private Long bookerId;
 
-    private User booker;
+    private UserDtoBrief booker;
 
     private BookingStatus status;
 }

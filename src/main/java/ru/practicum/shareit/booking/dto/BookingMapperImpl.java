@@ -1,24 +1,34 @@
 package ru.practicum.shareit.booking.dto;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.item.dto.ItemDtoBrief;
+import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 @Component
+@RequiredArgsConstructor
 public class BookingMapperImpl implements BookingMapper{
     public BookingDto toDto(Booking booking) {
         BookingDto dto = new BookingDto();
         dto.setId(booking.getId());
         dto.setStart(booking.getStartDate());
         dto.setEnd(booking.getEndDate());
-        dto.setItem(booking.getItem());
-        if (booking.getItem() != null) {
+        dto.setStatus(booking.getStatus());
+
+        if (booking.getItem() == null) {
+            dto.setItem(null);
+        } else {
+            dto.setItem(new ItemDtoBrief(booking.getItem()));
             dto.setItemId(booking.getItem().getId());
         }
-        dto.setBooker(booking.getBooker());
-        if (booking.getBooker() != null) {
+
+        if (booking.getBooker() == null) {
+            dto.setBooker(null);
+        } else {
+            dto.setBooker(new UserDtoBrief(booking.getBooker()));
             dto.setBookerId(booking.getBooker().getId());
         }
-        dto.setStatus(booking.getStatus());
 
         return dto;
     }
@@ -28,8 +38,6 @@ public class BookingMapperImpl implements BookingMapper{
         booking.setId(dto.getId());
         booking.setStartDate(dto.getStart());
         booking.setEndDate(dto.getEnd());
-        booking.setItem(dto.getItem());
-        booking.setBooker(dto.getBooker());
         booking.setStatus(dto.getStatus());
 
         return booking;
@@ -41,5 +49,13 @@ public class BookingMapperImpl implements BookingMapper{
         booking.setEndDate(dto.getEnd());
 
         return booking;
+    }
+
+    public BookingDtoBrief toDtoBrief(Booking booking) {
+        BookingDtoBrief dto = new BookingDtoBrief();
+        dto.setId(booking.getId());
+        dto.setBookerId(booking.getBooker().getId());
+
+        return dto;
     }
 }

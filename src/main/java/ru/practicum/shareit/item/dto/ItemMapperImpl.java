@@ -1,13 +1,12 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.dto.BookingForItemDto;
+import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 import ru.practicum.shareit.item.Item;
 
-import java.util.Optional;
-
 @Component
+@RequiredArgsConstructor
 public class ItemMapperImpl implements ItemMapper {
     public ItemDto toDto(Item item) {
         ItemDto dto = new ItemDto();
@@ -16,15 +15,16 @@ public class ItemMapperImpl implements ItemMapper {
         dto.setDescription(item.getDescription());
         dto.setOwnerId(item.getOwnerId());
         dto.setAvailable(item.getAvailable());
-        Booking nextBooking = item.getNextBooking();
-        if (nextBooking != null) {
-            dto.setNextBooking(new BookingForItemDto(nextBooking.getId(), nextBooking.getBooker().getId()));
+        if (item.getNextBooking() == null) {
+            dto.setNextBooking(null);
+        } else  {
+            dto.setNextBooking(new BookingDtoBrief(item.getNextBooking()));
         }
-        Booking lastBooking = item.getLastBooking();
-        if (lastBooking != null) {
-            dto.setLastBooking(new BookingForItemDto(lastBooking.getId(), lastBooking.getBooker().getId()));
+        if (item.getLastBooking() == null) {
+            dto.setLastBooking(null);
+        } else  {
+            dto.setLastBooking(new BookingDtoBrief(item.getLastBooking()));
         }
-
 
         return dto;
     }
