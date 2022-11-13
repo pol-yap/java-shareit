@@ -21,10 +21,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "text", length = 1000)
+    @Column(name = "text", length = 1000, nullable = false)
     private String text;
 
-    @Column(name = "created")
+    @Column(name = "created", nullable = false)
     private LocalDateTime created;
 
     @ManyToOne
