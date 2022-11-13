@@ -17,15 +17,13 @@ public class Item {
 
     @Id
     @Column(name = "id")
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_seq")
-//    @SequenceGenerator(name = "item_seq", sequenceName = "item_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String description;
 
     @Column(name = "available")
