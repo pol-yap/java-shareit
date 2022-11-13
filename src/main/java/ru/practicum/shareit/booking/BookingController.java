@@ -33,16 +33,18 @@ public class BookingController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> findAllOfBooker(@RequestHeader("X-Sharer-User-Id") long userId,
-                                            @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
+    public List<BookingDto> findAllOfBooker(
+            @RequestHeader("X-Sharer-User-Id") long userId,
+            @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
 
         return service.findAllOfBooker(userId, status.orElse(BookingStatus.ALL));
     }
 
     @GetMapping(path = "/owner")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> findAllOfOwner(@RequestHeader("X-Sharer-User-Id") long userId,
-                                           @Valid @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
+    public List<BookingDto> findAllOfOwner(
+            @RequestHeader("X-Sharer-User-Id") long userId,
+            @Valid @RequestParam(value = "state", required = false) Optional<BookingStatus> status) {
 
         return service.findAllOfOwner(userId, status.orElse(BookingStatus.ALL));
     }

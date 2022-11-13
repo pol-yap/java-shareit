@@ -33,7 +33,7 @@ public class BookingService {
     public BookingDto create(BookingDtoCreate dto, Long userId) {
         Booking booking = bookingMapper.fromDtoCreate(dto);
         enrich(booking, userId, dto.getItemId());
-        validate(booking);
+        throwIfNotValid(booking);
         booking.setStatus(BookingStatus.WAITING);
         repository.save(booking);
 
@@ -45,16 +45,10 @@ public class BookingService {
         if (!userId.equals(booking.getItem().getOwnerId())) {
             throw new NotFoundException(bookingId, "booking");
         }
-
         if (booking.getStatus() == BookingStatus.APPROVED) {
             throw new BadRequestException("Booking is already approved");
         }
-
-        if (approved) {
-            booking.setStatus(BookingStatus.APPROVED);
-        } else {
-            booking.setStatus(BookingStatus.REJECTED);
-        }
+        booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
 
         return bookingMapper.toDto(repository.save(booking));
     }
@@ -140,7 +134,8 @@ public class BookingService {
     }
 
     private Booking findBookingById(Long bookingId) {
-        return repository.findById(bookingId).orElseThrow(() -> new NotFoundException(bookingId, "booking"));
+        return repository.findById(bookingId)
+                         .orElseThrow(() -> new NotFoundException(bookingId, "booking"));
     }
 
     private void enrich(Booking booking, Long userId, Long itemId) {
@@ -150,7 +145,7 @@ public class BookingService {
         booking.setItem(item);
     }
 
-    private void validate(Booking booking) {
+    private void throwIfNotValid(Booking booking) {
         if (! booking.getItem().getAvailable()) {
             throw new BadRequestException("Item is not available");
         }
