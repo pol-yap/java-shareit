@@ -2,30 +2,22 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-public class ItemDto {
+public class ItemDtoCreate {
 
-    private Long id;
-
+    @NotNull(message = "Item name shouldn't be empty")
     @NotBlank(message = "Item name shouldn't be empty")
     private String name;
 
+    @NotNull(message = "Item description shouldn't be empty")
     @NotBlank(message = "Item description shouldn't be empty")
     private String description;
 
+    @NotNull(message = "Availability of item should be defined")
     private Boolean available;
-
-    private Long ownerId;
-
-    private BookingDtoBrief nextBooking;
-
-    private BookingDtoBrief lastBooking;
-
-    private List<CommentDto> comments;
 }

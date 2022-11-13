@@ -2,28 +2,23 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.item.dto.ItemDtoBrief;
-import ru.practicum.shareit.user.dto.UserDtoBrief;
 
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class BookingDto {
+public class BookingDtoCreate {
 
-    private Long id;
-
+    @NotNull(message = "Booking start date shouldn't be empty")
     @FutureOrPresent(message = "We can't book anything in the past")
     private LocalDateTime start;
 
+    @NotNull(message = "Booking end date shouldn't be empty")
     @FutureOrPresent(message = "We can't book anything in the past")
     private LocalDateTime end;
 
-    private ItemDtoBrief item;
-
-    private UserDtoBrief booker;
-
-    private BookingStatus status;
+    @NotNull(message = "Booking item's ID shouldn't be empty")
+    private Long itemId;
 }
