@@ -1,7 +1,11 @@
 package ru.practicum.shareit.booking;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
@@ -16,8 +20,8 @@ import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,75 +57,16 @@ public class BookingService {
         return bookingMapper.toDto(repository.save(booking));
     }
 
-    public List<BookingDto> findAllOfBooker(Long userId, BookingStatus status) {
+    public List<BookingDto> findAllOfBooker(Long userId, BookingStatus status, int page, int size) {
         userService.throwIfNoUser(userId);
-        List<Booking> result;
 
-        switch (status) {
-            case REJECTED:
-            case WAITING:
-                result = repository.findByBooker_IdAndStatusOrderByStartDateDesc(
-                        userId,
-                        status);
-                break;
-
-            case FUTURE:
-                result = repository.findByBooker_IdAndStartDateAfterOrderByStartDateDesc(
-                        userId,
-                        LocalDateTime.now());
-                break;
-
-            case PAST:
-                result = repository.findByBooker_IdAndEndDateBeforeOrderByStartDateDesc(
-                        userId,
-                        LocalDateTime.now());
-                break;
-
-            case CURRENT:
-                result = repository.findBookersCurrentBookings(
-                        userId,
-                        LocalDateTime.now());
-                break;
-
-            default:
-                result = repository.findByBooker_IdOrderByStartDateDesc(userId);
-        }
-
-        return result.stream()
-                     .map(bookingMapper::toDto)
-                     .collect(Collectors.toList());
+        return findAllByStatus(QBooking.booking.booker.id.eq(userId), status, page, size);
     }
 
-    public List<BookingDto> findAllOfOwner(Long userId, BookingStatus status) {
+    public List<BookingDto> findAllOfOwner(Long userId, BookingStatus status, int page, int size) {
         userService.throwIfNoUser(userId);
-        List<Booking> result;
-        switch (status) {
-            case REJECTED:
-            case WAITING:
-                result = repository.findByItem_OwnerIdAndStatusOrderByStartDateDesc(userId, status);
-                break;
 
-            case FUTURE:
-                result = repository.findByItem_OwnerIdAndStartDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
-                break;
-
-            case PAST:
-                result = repository.findByItem_OwnerIdAndEndDateBeforeOrderByStartDateDesc(userId, LocalDateTime.now());
-                break;
-
-            case CURRENT:
-                result = repository.findOwnersCurrentBookings(
-                        userId,
-                        LocalDateTime.now());
-                break;
-
-            default:
-                result = repository.findByItem_OwnerIdOrderByStartDateDesc(userId);
-        }
-
-        return result.stream()
-                     .map(bookingMapper::toDto)
-                     .collect(Collectors.toList());
+        return findAllByStatus(QBooking.booking.item.ownerId.eq(userId), status, page, size);
     }
 
     public BookingDto findById(Long bookingId, Long userId) {
@@ -136,6 +81,47 @@ public class BookingService {
     private Booking findBookingById(Long bookingId) {
         return repository.findById(bookingId)
                          .orElseThrow(() -> new NotFoundException(bookingId, "booking"));
+    }
+
+    private List<BookingDto> findAllByStatus(BooleanExpression initialCondition, BookingStatus status, int from, int size) {
+        if (from < 0 || size <= 0) {
+            throw new BadRequestException("Wrong pagination parameter value");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        List<BooleanExpression> conditions = new ArrayList<>();
+        conditions.add(initialCondition);
+
+        switch (status) {
+            case REJECTED:
+            case WAITING:
+                conditions.add(QBooking.booking.status.eq(status));
+                break;
+
+            case FUTURE:
+                conditions.add(QBooking.booking.startDate.after(now));
+                break;
+
+            case PAST:
+                conditions.add(QBooking.booking.endDate.before(now));
+                break;
+
+            case CURRENT:
+                conditions.add(QBooking.booking.startDate.before(now));
+                conditions.add(QBooking.booking.endDate.after(now));
+                break;
+
+            default:
+        }
+
+        BooleanExpression finalCondition = conditions.stream()
+                                                     .reduce(BooleanExpression::and)
+                                                     .get();
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by("startDate").descending());
+
+        return repository.findAll(finalCondition, pageable)
+                         .map(bookingMapper::toDto)
+                         .toList();
     }
 
     private void enrich(Booking booking, Long userId, Long itemId) {
@@ -155,7 +141,6 @@ public class BookingService {
         }
 
         if (booking.getBooker().getId().equals(booking.getItem().getOwnerId())) {
-            //throw new BadRequestException("Booking item by its owner not provided");
             throw new NotFoundException(booking.getItem().getId(), "item");
         }
 

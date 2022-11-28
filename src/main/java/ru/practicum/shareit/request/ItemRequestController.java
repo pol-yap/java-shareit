@@ -12,9 +12,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoCreate;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -40,11 +37,8 @@ public class ItemRequestController {
     public List<ItemRequestDto> getAll(@RequestHeader("X-Sharer-User-Id") long userId,
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "20") int size) {
-        if (from < 0 || size <= 0) {
-            throw new BadRequestException("Wrong pagination parameter value");
-        }
 
-        return service.getAll(userId, PageRequest.of(from, size)).getContent();
+        return service.getAll(userId, from, size).getContent();
     }
 
     @GetMapping(path = "/{id}")

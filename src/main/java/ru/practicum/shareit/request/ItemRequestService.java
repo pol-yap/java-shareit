@@ -2,9 +2,11 @@ package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.common.errors.BadRequestException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreate;
@@ -43,8 +45,12 @@ public class ItemRequestService {
     }
 
     @Transactional
-    public Page<ItemRequestDto> getAll(Long userId, Pageable pageable) {
-        return repository.findByUserIdNotOrderByCreatedDesc(userId, pageable)
+    public Page<ItemRequestDto> getAll(Long userId, int from, int size) {
+        if (from < 0 || size <= 0) {
+            throw new BadRequestException("Wrong pagination parameter value");
+        }
+
+        return repository.findByUserIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size))
                          .map(ItemRequestDto::new);
     }
 
