@@ -20,6 +20,7 @@ public class ItemMapperImpl implements ItemMapper {
         dto.setDescription(item.getDescription());
         dto.setOwnerId(item.getOwnerId());
         dto.setAvailable(item.getAvailable());
+        dto.setRequestId(item.getRequestId());
         dto.setNextBooking(getNullableBooking(item.getNextBooking()));
         dto.setLastBooking(getNullableBooking(item.getLastBooking()));
         dto.setComments(item.getComments().stream()
@@ -45,6 +46,7 @@ public class ItemMapperImpl implements ItemMapper {
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
         item.setAvailable(dto.getAvailable());
+        item.setRequestId(dto.getRequestId());
 
         return item;
     }

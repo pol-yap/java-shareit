@@ -38,6 +38,9 @@ public class Item {
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
+    @Column(name = "request_id")
+    private Long requestId;
+
     @Transient
     private Booking nextBooking;
 

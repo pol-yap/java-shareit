@@ -11,9 +11,17 @@ import ru.practicum.shareit.item.Item;
 public class ItemDtoBrief {
     private Long id;
     private String name;
+    private String description;
+    private Long ownerId;
+    private Boolean available;
+    private Long requestId;
 
     public ItemDtoBrief(Item item) {
         setId(item.getId());
         setName(item.getName());
+        setOwnerId(item.getOwnerId());
+        setDescription(item.getDescription());
+        setAvailable(item.getAvailable());
+        setRequestId(item.getRequestId());
     }
 }

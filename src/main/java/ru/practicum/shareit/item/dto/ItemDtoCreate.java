@@ -20,4 +20,6 @@ public class ItemDtoCreate {
 
     @NotNull(message = "Availability of item should be defined")
     private Boolean available;
+
+    private Long requestId;
 }
