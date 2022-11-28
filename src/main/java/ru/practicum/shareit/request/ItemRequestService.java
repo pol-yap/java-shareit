@@ -1,8 +1,11 @@
 package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreate;
 import ru.practicum.shareit.user.UserService;
@@ -37,5 +40,19 @@ public class ItemRequestService {
                          .stream()
                          .map(ItemRequestDto::new)
                          .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Page<ItemRequestDto> getAll(Long userId, Pageable pageable) {
+        return repository.findByUserIdNotOrderByCreatedDesc(userId, pageable)
+                         .map(ItemRequestDto::new);
+    }
+
+    @Transactional
+    public ItemRequestDto findById(Long userId, Long id) {
+        userService.throwIfNoUser(userId);
+
+        return new ItemRequestDto(repository.findById(id)
+                                            .orElseThrow(() -> new NotFoundException(id, "item request")));
     }
 }
