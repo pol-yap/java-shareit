@@ -33,7 +33,7 @@ public class Item {
     private Long ownerId;
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();

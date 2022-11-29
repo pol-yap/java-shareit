@@ -57,14 +57,14 @@ public class UserServiceTests {
     @Test
     void findAllTest() {
         List<UserDto> dtoList = service.findAll();
-        assertThat(dtoList, hasSize(1));
+        assertThat(dtoList, hasSize(2));
     }
 
     @Test
     void deleteByIdTest() {
         service.deleteById(1L);
         List<UserDto> dtoList = service.findAll();
-        assertThat(dtoList, hasSize(0));
+        assertThat(dtoList, hasSize(1));
     }
 
     @Test
