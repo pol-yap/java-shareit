@@ -2,7 +2,6 @@ package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.dataSet.ItemRequestTestSet;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
@@ -37,11 +35,6 @@ public class ItemRequestControllerTests {
     private final ItemRequestService service;
 
     private final ItemRequestTestSet testSet = new ItemRequestTestSet();
-
-
-//    @BeforeEach
-//    void setUp(WebApplicationContext wac) {
-//    }
 
     @Test
     void createTest() throws Exception {

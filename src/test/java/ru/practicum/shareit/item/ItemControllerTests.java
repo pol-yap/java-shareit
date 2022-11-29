@@ -96,7 +96,6 @@ public class ItemControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .header("X-Sharer-User-Id", userId));
 
-
         verify(service).findById(itemId, userId);
     }
 

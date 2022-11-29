@@ -2,6 +2,7 @@ package ru.practicum.shareit.dataSet;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.*;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class ItemTestSet {
+    private Item item;
     private ItemDto dto;
     private ItemDtoCreate dtoCreate;
     private final Long userId = 1L;
@@ -31,6 +33,14 @@ public class ItemTestSet {
         dtoCreate.setDescription(dto.getDescription());
         dtoCreate.setAvailable(dto.getAvailable());
         dtoCreate.setRequestId(dto.getRequestId());
+
+        item = new Item();
+        item.setId(dto.getId());
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        item.setOwnerId(dto.getOwnerId());
+        item.setRequestId(dto.getRequestId());
 
         commentDto = new CommentDto();
         commentDto.setText("some comment");

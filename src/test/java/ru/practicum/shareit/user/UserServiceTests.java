@@ -62,7 +62,7 @@ public class UserServiceTests {
 
     @Test
     void deleteByIdTest() {
-        service.deleteById(1L);
+        service.deleteById(2L);
         List<UserDto> dtoList = service.findAll();
         assertThat(dtoList, hasSize(1));
     }
