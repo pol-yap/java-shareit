@@ -30,11 +30,6 @@ public class CommonExceptionHandler {
         return handleAndResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler(NotUniqueException.class)
-    public ResponseEntity<ErrorMessage> handleNotUnique(NotUniqueException e) {
-        return handleAndResponse(HttpStatus.CONFLICT, e.getMessage());
-    }
-
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorMessage> handleForbidden(ForbiddenException e) {
         return handleAndResponse(HttpStatus.FORBIDDEN, e.getMessage());
