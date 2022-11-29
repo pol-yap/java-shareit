@@ -38,7 +38,7 @@ public class ItemRequestController {
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "20") int size) {
 
-        return service.getAll(userId, from, size).getContent();
+        return service.getAll(userId, from, size);
     }
 
     @GetMapping(path = "/{id}")

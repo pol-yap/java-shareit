@@ -45,13 +45,13 @@ public class ItemRequestService {
     }
 
     @Transactional
-    public Page<ItemRequestDto> getAll(Long userId, int from, int size) {
+    public List<ItemRequestDto> getAll(Long userId, int from, int size) {
         if (from < 0 || size <= 0) {
             throw new BadRequestException("Wrong pagination parameter value");
         }
 
         return repository.findByUserIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size))
-                         .map(ItemRequestDto::new);
+                         .map(ItemRequestDto::new).getContent();
     }
 
     @Transactional
