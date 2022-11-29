@@ -101,7 +101,7 @@ public class BookingControllerTests {
     }
 
     @Test
-    void findByIdTest() throws Exception{
+    void findByIdTest() throws Exception {
         Long userId = testSet.getUserId();
         BookingDto dto = testSet.getDto();
         Long bookingId = dto.getId();

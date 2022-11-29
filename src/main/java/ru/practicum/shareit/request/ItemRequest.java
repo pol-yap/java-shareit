@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
-import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.item.Item;
 
 import javax.persistence.*;
