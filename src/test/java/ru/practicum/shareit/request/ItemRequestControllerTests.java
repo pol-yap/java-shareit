@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {ItemRequestController.class, ItemRequestService.class})
+@WebMvcTest(controllers = {ItemRequestController.class})
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @ExtendWith(MockitoExtension.class)
 public class ItemRequestControllerTests {
@@ -39,9 +39,9 @@ public class ItemRequestControllerTests {
     private final ItemRequestTestSet testSet = new ItemRequestTestSet();
 
 
-    @BeforeEach
-    void setUp(WebApplicationContext wac) {
-    }
+//    @BeforeEach
+//    void setUp(WebApplicationContext wac) {
+//    }
 
     @Test
     void createTest() throws Exception {

@@ -15,6 +15,7 @@ public class UserTestSet {
 
     public UserTestSet() {
         user = User.builder()
+                   .id(1L)
                    .name("User1")
                    .email("user1@server.io")
                    .build();
@@ -23,5 +24,11 @@ public class UserTestSet {
                                  .name(user.getName())
                                  .email(user.getEmail())
                                  .build();
+
+        dto = UserDto.builder()
+                     .name(user.getName())
+                     .email(user.getEmail())
+                     .id(user.getId())
+                     .build();
     }
 }
