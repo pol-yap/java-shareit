@@ -11,7 +11,7 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -65,5 +65,6 @@ public class ItemRequestServiceTests {
 
         ItemRequestDto foundDto = service.findById(userId, dto.getId());
         assertThat(foundDto.getDescription(), equalTo(dto.getDescription()));
+        assertTrue(foundDto.equals(dto));
     }
 }
