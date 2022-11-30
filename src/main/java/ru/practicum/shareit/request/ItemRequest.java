@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request;
 
+import com.querydsl.core.annotations.QueryExclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @Entity
+@QueryExclude
 @Table(name = "requests")
 public class ItemRequest {
 

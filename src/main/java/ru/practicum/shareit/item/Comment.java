@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import com.querydsl.core.annotations.QueryExclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@QueryExclude
 @Table(name = "comments")
 public class Comment {
     @Id

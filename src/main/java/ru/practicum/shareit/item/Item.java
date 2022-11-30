@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item;
 
+import com.querydsl.core.annotations.PropertyType;
+import com.querydsl.core.annotations.QueryType;
 import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 
@@ -36,6 +38,7 @@ public class Item {
     private List<Booking> bookings = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    @QueryType(PropertyType.NONE)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "request_id")
