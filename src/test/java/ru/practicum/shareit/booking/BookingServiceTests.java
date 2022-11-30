@@ -5,9 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoBrief;
+import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.common.errors.BadRequestException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.dataSet.BookingTestSet;
+import ru.practicum.shareit.dataSet.UserTestSet;
 
 import javax.transaction.Transactional;
 
@@ -24,7 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingServiceTests {
     private final BookingService service;
+    private final BookingMapper mapper;
     private final BookingTestSet testSet = new BookingTestSet();
+    private final UserTestSet userTestSet = new UserTestSet();
 
     @Test
     void createTest() {
@@ -94,6 +99,13 @@ public class BookingServiceTests {
         BookingDto dto = testSet.getDto();
         BookingDto dtoFound = service.findById(userId, dto.getId());
         assertThat(dto.getId(), equalTo(dtoFound.getId()));
+
+        Booking booking = mapper.fromDto(dtoFound);
+        assertThat(booking.getId(), equalTo(dto.getId()));
+
+        booking.setBooker(userTestSet.getUser());
+        BookingDtoBrief dtoBrief = mapper.toDtoBrief(booking);
+        assertThat(dtoBrief.getId(), equalTo(booking.getId()));
 
         NotFoundException notFoundException;
         notFoundException = assertThrows(NotFoundException.class,
