@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface BookingRepository  extends JpaRepository<Booking, Long>, QuerydslPredicateExecutor<Booking> {
 
-    List<Booking> findByItem_IdAndStatusNot(Long id, BookingStatus status);
+    List<Booking> findByItemIdAndStatusNot(Long id, BookingStatus status);
 }

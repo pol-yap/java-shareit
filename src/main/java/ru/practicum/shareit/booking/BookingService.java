@@ -144,7 +144,7 @@ public class BookingService {
             throw new NotFoundException(booking.getItem().getId(), "item");
         }
 
-        List<Booking> otherBookings = repository.findByItem_IdAndStatusNot(
+        List<Booking> otherBookings = repository.findByItemIdAndStatusNot(
                 booking.getItem().getId(),
                 BookingStatus.REJECTED);
 
