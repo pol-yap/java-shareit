@@ -36,15 +36,13 @@ javax.persistence.schema-generation:
   database.action: create
   create-script-source: schema.sql
 
-logging:
-  level:
-    ru.practicum.shareit: DEBUG
-    org.springframework:
-        orm:
-          jpa: INFO
-          jpa.JpaTransactionManager: DEBUG
-        transaction: INFO
-        transaction.interceptor: TRACE
-    org:
-      hibernate:
-        type: trace
+logging.level:
+  ru.practicum.shareit: TRACE
+  org.springframework:
+    orm:
+      jpa: INFO
+      jpa.JpaTransactionManager: DEBUG
+    transaction: INFO
+    transaction.interceptor: TRACE
+  org.hibernate:
+    type: TRACE

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository repository;
@@ -33,8 +35,10 @@ public class ItemService {
         Item item = mapper.fromDtoCreate(itemDto);
         item.setOwnerId(userId);
         item.setAvailable(true);
+        repository.save(item);
+        log.trace("Created item: " + item);
 
-        return mapper.toDto(repository.save(item));
+        return mapper.toDto(item);
     }
 
     @Transactional
@@ -43,6 +47,7 @@ public class ItemService {
         Item item = findItemById(itemId);
         throwIfUserNotOwner(item, userId);
         updateItemData(item, mapper.fromDto(itemDto));
+        log.trace("Updated item: " + item);
 
         return mapper.toDto(item);
     }

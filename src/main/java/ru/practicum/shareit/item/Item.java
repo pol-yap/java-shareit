@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "items")
 public class Item {
@@ -35,10 +36,12 @@ public class Item {
     private Long ownerId;
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Booking> bookings = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     @QueryType(PropertyType.NONE)
+    @ToString.Exclude
     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "request_id")

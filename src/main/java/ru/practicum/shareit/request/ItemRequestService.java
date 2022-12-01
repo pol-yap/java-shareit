@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ItemRequestService {
     private final ItemRequestRepository repository;
@@ -28,6 +30,7 @@ public class ItemRequestService {
         itemRequest.setDescription(createDto.getDescription());
         itemRequest.setUserId(userId);
         itemRequest.setCreated(LocalDateTime.now());
+        log.trace("Created item request: " + itemRequest);
 
         return new ItemRequestDto(repository.save(itemRequest));
     }

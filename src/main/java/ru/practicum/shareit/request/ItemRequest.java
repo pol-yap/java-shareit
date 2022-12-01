@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryExclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import ru.practicum.shareit.item.Item;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @Entity
 @QueryExclude
 @Table(name = "requests")
@@ -34,5 +36,6 @@ public class ItemRequest {
     private LocalDateTime created;
 
     @OneToMany(mappedBy = "requestId")
+    @ToString.Exclude
     private List<Item> items = new ArrayList<>();
 }

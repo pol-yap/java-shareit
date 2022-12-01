@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
@@ -19,6 +21,7 @@ public class UserService {
     public UserDto create(UserDtoCreate userDto) {
         User user = mapper.fromDtoCreate(userDto);
         repository.saveAndFlush(user);
+        log.trace("Created user: " + user);
 
         return mapper.toDto(user);
     }
@@ -27,6 +30,7 @@ public class UserService {
         User user = findUserById(userId);
         updateUserData(user, mapper.fromDto(userDto));
         repository.saveAndFlush(user);
+        log.trace("Updated user: " + user);
 
         return mapper.toDto(user);
     }
@@ -44,6 +48,7 @@ public class UserService {
 
     public void deleteById(Long userId) {
         repository.deleteById(userId);
+        log.trace("User id=" + userId + " deleted");
     }
 
     public void throwIfNoUser(Long userId) {

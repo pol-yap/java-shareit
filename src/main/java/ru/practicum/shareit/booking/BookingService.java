@@ -40,6 +40,7 @@ public class BookingService {
         throwIfNotValid(booking);
         booking.setStatus(BookingStatus.WAITING);
         repository.save(booking);
+        log.trace("Created booking: " + booking);
 
         return bookingMapper.toDto(booking);
     }
@@ -53,6 +54,7 @@ public class BookingService {
             throw new BadRequestException("Booking is already approved");
         }
         booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
+        log.trace(String.format("Booking id=%d status changed to %s", booking.getId(), booking.getStatus()));
 
         return bookingMapper.toDto(repository.save(booking));
     }
