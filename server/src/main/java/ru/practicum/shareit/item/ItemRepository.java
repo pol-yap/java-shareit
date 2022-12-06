@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findByOwnerId(Long userId);
+    List<Item> findByOwnerIdOrderByIdAsc(Long ownerId);
 
     @Query("SELECT i FROM Item i WHERE " +
             "(upper(i.name) LIKE upper(:criteria) " +

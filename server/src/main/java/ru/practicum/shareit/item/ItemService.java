@@ -61,10 +61,10 @@ public class ItemService {
 
     @Transactional
     public List<ItemDto> findAllByOwner(final Long userId) {
-        List<Item> items = repository.findByOwnerId(userId);
+        List<Item> items = repository.findByOwnerIdOrderByIdAsc(userId);
         items.forEach(i -> enrichByLastAndNextBookings(i, userId));
 
-        return repository.findByOwnerId(userId)
+        return repository.findByOwnerIdOrderByIdAsc(userId)
                          .stream()
                          .map(mapper::toDto)
                          .collect(Collectors.toList());
