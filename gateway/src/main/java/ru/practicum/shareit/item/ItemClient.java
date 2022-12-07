@@ -10,6 +10,8 @@ import ru.practicum.shareit.item.dto.CommentDtoCreate;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoCreate;
 
+import java.util.Map;
+
 @Service
 public class ItemClient extends BaseClient {
     private static final String API_PREFIX = "/items";
@@ -28,7 +30,10 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> search(String criteria) {
-        return get("/search?text=" + criteria);
+        Map<String, Object> parameters = Map.of(
+                "criteria", criteria
+        );
+        return get("/search?text={criteria}", 0L, parameters);
     }
 
     public ResponseEntity<Object> create(Long userId, ItemDtoCreate dto) {
@@ -40,6 +45,9 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> addComment(Long userId, Long itemId, CommentDtoCreate dto) {
-        return post("/" + itemId + "/comment", userId, dto);
+        Map<String, Object> parameters = Map.of(
+                "itemId", itemId
+        );
+        return post("/{itemId}/comment", userId, parameters, dto);
     }
 }
