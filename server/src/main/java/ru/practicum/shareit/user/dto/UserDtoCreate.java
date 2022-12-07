@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UserDtoCreate {
 
-    @NotNull(message = "User name shouldn't be empty")
+    @NotNull(message = "User name should be defined")
     @NotBlank(message = "User name shouldn't be empty")
     private String name;
 
-    @NotNull(message = "User email shouldn't be empty")
+    @NotNull(message = "User email should be defined")
     @NotBlank(message = "User email shouldn't be empty")
     @Email(message = "User email should be valid address")
     private String email;
