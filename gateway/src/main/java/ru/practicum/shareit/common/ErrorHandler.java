@@ -12,27 +12,18 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessage> handleIllegalArgumentException(IllegalArgumentException e) {
-        String message = e.getMessage();
-
-        return handleAndResponse(HttpStatus.BAD_REQUEST, message);
+    @ExceptionHandler({IllegalArgumentException.class, ConstraintViolationException.class})
+    public ResponseEntity<ErrorMessage> handleBadRequestExceptions(Exception e) {
+        return handleAndResponse(HttpStatus.BAD_REQUEST, e);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorMessage> handleConstraintViolationException(ConstraintViolationException e) {
-        String message = e.getMessage();
-
-        return handleAndResponse(HttpStatus.BAD_REQUEST, message);
-    }
-
-    private ResponseEntity<ErrorMessage> handleAndResponse(HttpStatus status, String message) {
-        log.warn(message);
+    private ResponseEntity<ErrorMessage> handleAndResponse(HttpStatus status, Exception e) {
+        log.warn("Something went wrong: {}", e.getMessage(), e);
 
         return new ResponseEntity<>(
                 ErrorMessage.builder()
                             .status(status.value())
-                            .error(message)
+                            .error(e.getMessage())
                             .build(),
                 status);
     }
