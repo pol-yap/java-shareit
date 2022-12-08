@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import ru.practicum.shareit.common.errors.BadRequestException;
 import ru.practicum.shareit.common.errors.NotFoundException;
 import ru.practicum.shareit.dataSet.ItemRequestTestSet;
@@ -21,6 +22,7 @@ import java.util.List;
         properties = "db.name=test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Sql(scripts={"classpath:schema.sql", "classpath:data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class ItemRequestServiceTests {
     private final ItemRequestService service;
     private final ItemRequestTestSet testSet = new ItemRequestTestSet();
