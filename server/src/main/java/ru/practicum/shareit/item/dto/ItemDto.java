@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoBrief;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -13,10 +12,8 @@ public class ItemDto {
 
     private Long id;
 
-    @NotBlank(message = "Item name shouldn't be empty")
     private String name;
 
-    @NotBlank(message = "Item description shouldn't be empty")
     private String description;
 
     private Boolean available;

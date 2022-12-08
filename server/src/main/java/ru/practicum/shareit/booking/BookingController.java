@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreate;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto create(@RequestHeader("X-Sharer-User-Id") long userId,
-                             @Valid @RequestBody BookingDtoCreate bookingDto) {
+                             @RequestBody BookingDtoCreate bookingDto) {
         return service.create(bookingDto, userId);
     }
 
@@ -46,7 +45,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> findAllOfOwner(
             @RequestHeader("X-Sharer-User-Id") long userId,
-            @Valid @RequestParam(value = "state", required = false) Optional<BookingStatus> status,
+            @RequestParam(value = "state", required = false) Optional<BookingStatus> status,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "20") int size) {
 
