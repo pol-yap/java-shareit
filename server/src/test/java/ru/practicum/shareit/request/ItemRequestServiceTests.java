@@ -49,9 +49,6 @@ public class ItemRequestServiceTests {
     void getAllTest() {
         ItemRequestDto dto = service.create(testSet.getDtoCreate(), testSet.getUserId());
 
-        Exception ex = assertThrows(BadRequestException.class, () -> service.getAll(testSet.getUserId(), 0, 0));
-        assertThat(ex.getMessage(), equalTo("Wrong pagination parameter value"));
-
         List<ItemRequestDto> dtoList = service.getAll(66L, 0, 20);
         assertThat(dtoList, hasSize(1));
         assertThat(dtoList, hasItem(any(ItemRequestDto.class)));

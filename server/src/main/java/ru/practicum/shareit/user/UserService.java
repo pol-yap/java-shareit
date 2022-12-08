@@ -21,7 +21,7 @@ public class UserService {
     public UserDto create(UserDtoCreate userDto) {
         User user = mapper.fromDtoCreate(userDto);
         repository.saveAndFlush(user);
-        log.trace("Created user: " + user);
+        log.info("Created user: " + user);
 
         return mapper.toDto(user);
     }
@@ -30,7 +30,7 @@ public class UserService {
         User user = findUserById(userId);
         updateUserData(user, mapper.fromDto(userDto));
         repository.saveAndFlush(user);
-        log.trace("Updated user: " + user);
+        log.info("Updated user: " + user);
 
         return mapper.toDto(user);
     }
@@ -48,7 +48,7 @@ public class UserService {
 
     public void deleteById(Long userId) {
         repository.deleteById(userId);
-        log.trace("User id=" + userId + " deleted");
+        log.info("User id={} deleted", userId);
     }
 
     public void throwIfNoUser(Long userId) {

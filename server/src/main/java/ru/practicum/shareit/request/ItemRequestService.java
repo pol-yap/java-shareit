@@ -30,7 +30,7 @@ public class ItemRequestService {
         itemRequest.setDescription(createDto.getDescription());
         itemRequest.setUserId(userId);
         itemRequest.setCreated(LocalDateTime.now());
-        log.trace("Created item request: " + itemRequest);
+        log.info("Created item request: " + itemRequest);
 
         return new ItemRequestDto(repository.save(itemRequest));
     }
@@ -47,10 +47,6 @@ public class ItemRequestService {
 
     @Transactional
     public List<ItemRequestDto> getAll(Long userId, int from, int size) {
-        if (from < 0 || size <= 0) {
-            throw new BadRequestException("Wrong pagination parameter value");
-        }
-
         return repository.findByUserIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size))
                          .map(ItemRequestDto::new).getContent();
     }

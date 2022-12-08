@@ -40,7 +40,7 @@ public class BookingService {
         throwIfNotValid(booking);
         booking.setStatus(BookingStatus.WAITING);
         repository.save(booking);
-        log.trace("Created booking: " + booking);
+        log.info("Created booking: " + booking);
 
         return bookingMapper.toDto(booking);
     }
@@ -54,7 +54,7 @@ public class BookingService {
             throw new BadRequestException("Booking is already approved");
         }
         booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
-        log.trace(String.format("Booking id=%d status changed to %s", booking.getId(), booking.getStatus()));
+        log.info("Booking id={} status changed to {}", booking.getId(), booking.getStatus());
 
         return bookingMapper.toDto(repository.save(booking));
     }
@@ -86,10 +86,6 @@ public class BookingService {
     }
 
     private List<BookingDto> findAllByStatus(BooleanExpression initialCondition, BookingStatus status, int from, int size) {
-        if (from < 0 || size <= 0) {
-            throw new BadRequestException("Wrong pagination parameter value");
-        }
-
         LocalDateTime now = LocalDateTime.now();
         List<BooleanExpression> conditions = new ArrayList<>();
         conditions.add(initialCondition);

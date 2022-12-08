@@ -74,9 +74,6 @@ public class BookingServiceTests {
 
         dtoList = service.findAllOfBooker(userId, BookingStatus.FUTURE, 0, 20);
         assertThat(dtoList, hasSize(0));
-
-        BadRequestException badRequestException = assertThrows(BadRequestException.class,
-                () -> service.findAllOfBooker(userId, BookingStatus.PAST, 0, 0));
     }
 
     @Test
