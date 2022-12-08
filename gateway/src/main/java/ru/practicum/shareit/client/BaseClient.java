@@ -26,7 +26,7 @@ public class BaseClient {
         this.rest = builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(baseUriTemplate))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
-                .build() ;
+                .build();
     }
 
     protected ResponseEntity<Object> get(String path) {
