@@ -40,7 +40,7 @@ public class BookingService {
         throwIfNotValid(booking);
         booking.setStatus(BookingStatus.WAITING);
         repository.save(booking);
-        log.info("Created booking: " + booking);
+        log.info("Created booking: {}", booking);
 
         return bookingMapper.toDto(booking);
     }

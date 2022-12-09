@@ -29,7 +29,7 @@ public class ItemRequestService {
         itemRequest.setDescription(createDto.getDescription());
         itemRequest.setUserId(userId);
         itemRequest.setCreated(LocalDateTime.now());
-        log.info("Created item request: " + itemRequest);
+        log.info("Created item request: {}", itemRequest);
 
         return new ItemRequestDto(repository.save(itemRequest));
     }
@@ -37,6 +37,7 @@ public class ItemRequestService {
     @Transactional
     public List<ItemRequestDto> getOwn(Long userId) {
         userService.throwIfNoUser(userId);
+        log.info("User {} gets his item requests", userId);
 
         return repository.findByUserIdOrderByCreatedDesc(userId)
                          .stream()
@@ -46,6 +47,8 @@ public class ItemRequestService {
 
     @Transactional
     public List<ItemRequestDto> getAll(Long userId, int from, int size) {
+        log.info("User {} view all item requests", userId);
+
         return repository.findByUserIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size))
                          .map(ItemRequestDto::new).getContent();
     }
@@ -53,6 +56,7 @@ public class ItemRequestService {
     @Transactional
     public ItemRequestDto findById(Long userId, Long id) {
         userService.throwIfNoUser(userId);
+        log.info("User {} finds item request {}", userId, id);
 
         return new ItemRequestDto(repository.findById(id)
                                             .orElseThrow(() -> new NotFoundException(id, "item request")));

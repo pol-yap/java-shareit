@@ -27,6 +27,8 @@ public class BookingController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long userId,
 										 @Valid @RequestBody BookingDtoCreate dto) {
+		log.info("User {} books item {}", userId, dto.getItemId());
+
 		return client.create(userId, dto);
 	}
 
@@ -35,6 +37,10 @@ public class BookingController {
 	public ResponseEntity<Object> updateState(@RequestHeader("X-Sharer-User-Id") long userId,
 											  @RequestParam("approved") boolean approved,
 											  @PathVariable("bookingId") long bookingId) {
+		log.info("User {} {}approved booking {}",
+				userId,
+				(approved) ? "" : "not ",
+				bookingId);
 		return client.approve(userId, bookingId, approved);
 	}
 
@@ -48,6 +54,7 @@ public class BookingController {
 
 		BookingStatus status = BookingStatus.from(stateParam)
 											.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+		log.info("Find {} bookings of user {}", status, userId);
 
 		return client.findAllOfBooker(userId, status, from, size);
 	}
@@ -62,6 +69,7 @@ public class BookingController {
 
 		BookingStatus status = BookingStatus.from(stateParam)
 				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+		log.info("Find {} bookings of items owned by user {}", status, userId);
 
 		return client.findAllOfOwner(userId, status, from, size);
 	}
@@ -70,6 +78,7 @@ public class BookingController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> findById(@RequestHeader("X-Sharer-User-Id") long userId,
 										   @PathVariable("bookingId") long bookingId) {
+		log.info("User {} finds booking {}", userId, bookingId);
 		return client.findById(userId, bookingId);
 	}
 }

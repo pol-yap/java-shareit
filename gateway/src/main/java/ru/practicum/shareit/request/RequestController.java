@@ -25,12 +25,16 @@ public class RequestController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long userId,
                                          @Valid @RequestBody ItemRequestDtoCreate itemRequestDtoCreate) {
+        log.info("User {} makes new request: {}", userId, itemRequestDtoCreate);
+
         return client.create(userId, itemRequestDtoCreate);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getOwn(@RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("User {} finds his requests", userId);
+
         return client.getOwn(userId);
     }
 
@@ -39,6 +43,8 @@ public class RequestController {
     public ResponseEntity<Object> getAll(@RequestHeader("X-Sharer-User-Id") long userId,
                                          @PositiveOrZero @RequestParam(defaultValue = "0") int from,
                                          @Positive @RequestParam(defaultValue = "20") int size) {
+        log.info("User {} view all requests", userId);
+
         return client.getAll(userId, from, size);
     }
 
@@ -46,6 +52,8 @@ public class RequestController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> findById(@RequestHeader("X-Sharer-User-Id") long userId,
                                            @PathVariable long id) {
+        log.info("User {} finds request {}", userId, id);
+
         return client.findById(userId, id);
     }
 }

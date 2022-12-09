@@ -36,7 +36,7 @@ public class ItemService {
         item.setOwnerId(userId);
         item.setAvailable(true);
         repository.save(item);
-        log.info("Created item: " + item);
+        log.info("Created item: {}", item);
 
         return mapper.toDto(item);
     }
@@ -47,7 +47,7 @@ public class ItemService {
         Item item = findItemById(itemId);
         throwIfUserNotOwner(item, userId);
         updateItemData(item, mapper.fromDto(itemDto));
-        log.info("Updated item: " + item);
+        log.info("Updated item: {}", item);
 
         return mapper.toDto(item);
     }

@@ -21,7 +21,7 @@ public class UserService {
     public UserDto create(UserDtoCreate userDto) {
         User user = mapper.fromDtoCreate(userDto);
         repository.saveAndFlush(user);
-        log.info("Created user: " + user);
+        log.info("Created user: {}", user);
 
         return mapper.toDto(user);
     }
@@ -30,7 +30,7 @@ public class UserService {
         User user = findUserById(userId);
         updateUserData(user, mapper.fromDto(userDto));
         repository.saveAndFlush(user);
-        log.info("Updated user: " + user);
+        log.info("Updated user: {}", user);
 
         return mapper.toDto(user);
     }
@@ -40,6 +40,7 @@ public class UserService {
     }
 
     public List<UserDto> findAll() {
+        log.info("View all users");
         return repository.findAll()
                          .stream()
                          .map(mapper::toDto)
