@@ -1,8 +1,15 @@
 # ShareIt
 Service for belongings share
 
-## Requirements
+## Start with Docker
+### Requirements
 - JDK 11
 - Apache Maven
+- Docker
+- Docker Compose
 
-## Start with Docker
+In project directory
+```
+mvn package
+```
+```docker-compose up```
