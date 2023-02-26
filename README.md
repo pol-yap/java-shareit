@@ -1,2 +1,2 @@
-# java-shareit
+## ShareIt
 Service for belongings share
