@@ -10,6 +10,14 @@ Someone has something that he is willing to let others use. He publishes a descr
 - After end of the item booking, the user can leave a comment about this item
 - Main servis runs behind gateway
 
+## Technology stack
+- Java
+- Spring Boot
+- Hibernate
+- QueryDSL
+- PostgreSQL
+- Docker
+
 ## Start with Docker
 ### Requirements
 - JDK 11
