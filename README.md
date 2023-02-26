@@ -8,7 +8,7 @@ Someone has something that he is willing to let others use. He publishes a descr
 - Item search by keyword
 - Booking request may be approved by item owner or rejected by him
 - After end of the item booking, the user can leave a comment about this item
-- Main servis runs behind gateway
+- Main service runs behind gateway
 
 ## Technology stack
 - Java
