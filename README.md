@@ -9,7 +9,5 @@ Service for belongings share
 - Docker Compose
 
 In project directory
-```
-mvn package
-```
+```mvn package```
 ```docker-compose up```
